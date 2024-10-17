@@ -254,7 +254,7 @@
         }
 
         function fetchReservoirs(latitude, longitude) {
-            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/')
+            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/?limit=400')
                 .then(response => response.json())
                 .then(data => {
                     const nearbyReservoirs = data.items.filter(reservoir => {
