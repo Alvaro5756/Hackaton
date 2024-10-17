@@ -61,7 +61,7 @@
     </div>
     <div class="homepage-link">
         <a href="index.html">Homepage</a>
-    <button id="fetchData">Cargar Datos</button>
+    </div>
     <h2>Datos:</h2>
     <table id="dataTable" style="display:none;">
         <thead>
@@ -83,13 +83,14 @@
     </table>
 
     <script>
-        document.getElementById('fetchData').addEventListener('click', () => {
+        // Función para cargar los datos al entrar en la página
+        const loadData = () => {
             const username = 'CAJA'; // reemplaza con tu usuario
             const password = 'MEREngue!!!c4j0n3r0_'; // reemplaza con tu contraseña
             const headers = new Headers();
             headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
 
-            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/?limit=400', {
+            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/embalses_listado/?limit=400', {
                 method: 'GET',
                 headers: headers
             })
@@ -132,7 +133,10 @@
                 tbody.innerHTML = '<tr><td colspan="11">Error: ' + error.message + '</td></tr>';
                 document.getElementById('dataTable').style.display = 'table';
             });
-        });
+        };
+
+        // Cargar los datos al entrar en la página
+        window.onload = loadData;
     </script>
 </body>
 </html>
