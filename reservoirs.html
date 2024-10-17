@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embalses Cercanos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Embalses Cercanos</h1>
+    <table id="reservoirsTable">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Demarcación</th>
+                <th>Provincia</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody id="reservoirsBody"></tbody>
+    </table>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const latitude = parseFloat(urlParams.get('lat'));
+        const longitude = parseFloat(urlParams.get('long'));
+
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+            fetchReservoirs(latitude, longitude);
+        }
+
+        function fetchReservoirs(lat, long) {
+            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/')
+                .then(response => response.json())
+                .then(data => {
+                    const nearbyReservoirs = data.items.filter(reservoir => {
+                        const distance = calculateDistance(lat, long, reservoir.x, reservoir.y);
+                        return distance <= 100; // Distancia en kilómetros
+                    });
+                    displayReservoirs(nearbyReservoirs);
+                })
+                .catch(error => console.error('Error fetching reservoirs:', error));
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radio de la Tierra en kilómetros
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c; // Distancia en kilómetros
+        }
+
+        function displayReservoirs(reservoirs) {
+            const reservoirsBody = document.getElementById('reservoirsBody');
+            reservoirsBody.innerHTML = ''; // Limpiar tabla anterior
+
+            if (reservoirs.length === 0) {
+                reservoirsBody.innerHTML = '<tr><td colspan="5">No se encontraron embalses cercanos.</td></tr>';
+                return;
+            }
+
+            reservoirs.forEach(reservoir => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${reservoir.codigo}</td>
+                    <td>${reservoir.nombre}</td>
+                    <td>${reservoir.demarc}</td>
+                    <td>${reservoir.provincia}</td>
+                    <td>${reservoir.tipo}</td>
+                `;
+                reservoirsBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
