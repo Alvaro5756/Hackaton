@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprobación de API REST</title>
+    <title>Proyecto de C.A.J.A.</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,7 +57,7 @@
 </head>
 <body>
     <div class="header-container">
-        <h1>Sobre nosotros</h1>
+        <h1>Lista de todos los embalses</h1>
     </div>
     <div class="homepage-link">
         <a href="index.html">Homepage</a>
@@ -89,7 +89,7 @@
             const headers = new Headers();
             headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
 
-            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/', {
+            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/?limit=400', {
                 method: 'GET',
                 headers: headers
             })
