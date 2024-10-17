@@ -58,9 +58,15 @@
             <tr>
                 <th>Código</th>
                 <th>Nombre</th>
+                <th>Embalse</th>
+                <th>X</th>
+                <th>Y</th>
                 <th>Demarcación</th>
+                <th>Cauce</th>
                 <th>Provincia</th>
+                <th>CCAA</th>
                 <th>Tipo</th>
+                <th>Informe</th>
             </tr>
         </thead>
         <tbody id="reservoirsBody"></tbody>
@@ -111,11 +117,17 @@
             reservoirs.forEach(reservoir => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${reservoir.codigo}</td>
-                    <td>${reservoir.nombre}</td>
-                    <td>${reservoir.demarc}</td>
-                    <td>${reservoir.provincia}</td>
-                    <td>${reservoir.tipo}</td>
+                      <td>${item.codigo}</td>
+                        <td>${item.nombre}</td>
+                        <td>${item.embalse}</td>
+                        <td>${item.x}</td>
+                        <td>${item.y}</td>
+                        <td>${item.demarc}</td>
+                        <td>${item.cauce}</td>
+                        <td>${item.provincia}</td>
+                        <td>${item.ccaa}</td>
+                        <td>${item.tipo}</td>
+                        <td><a href="${item.informe}" target="_blank">Ver Informe</a></td>
                 `;
                 reservoirsBody.appendChild(row);
             });
