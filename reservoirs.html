@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Embalses Cercanos</title>
-    <style>  
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -22,7 +23,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
@@ -48,21 +50,62 @@
             display: inline-block;
             margin: 10px 0;
         }
+
+        /* Estilo para el botón de accesibilidad */
+        #accessibilityBtn {
+            display: block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            position: fixed;
+            /* Cambiado a fixed */
+            bottom: 20px;
+            /* Espacio desde el fondo */
+            right: 20px;
+            /* Espacio desde la derecha */
+        }
+
+        /* Estilo para el menú desplegable */
+        .dropdown {
+            display: none;
+            position: fixed;
+            /* Cambiado a fixed */
+            bottom: 60px;
+            /* Espacio sobre el botón de accesibilidad */
+            right: 20px;
+            /* Alinear con el botón */
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .dropdown button {
+            display: block;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px 0;
+            width: 100%;
+        }
     </style>
 </head>
+
 <body>
     <h1>Embalses Cercanos</h1>
     <div class="homepage-link">
-        <a href="index.html">Homepage</a>
+        <a href="index.html">Inicio</a>
     </div>
     <table id="reservoirsTable">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Ámbito Nombre</th>
-                <th>Embalse Nombre</th>
-                <th>Agua Total</th>
-                <th>Eléctrico Flag</th>
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Embalse</th>
@@ -108,8 +151,8 @@
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c; // Distancia en kilómetros
         }
@@ -119,18 +162,13 @@
             reservoirsBody.innerHTML = ''; // Limpiar tabla anterior
 
             if (reservoirs.length === 0) {
-                reservoirsBody.innerHTML = '<tr><td colspan="17">No se encontraron embalses cercanos.</td></tr>';
+                reservoirsBody.innerHTML = '<tr><td colspan="13">No se encontraron embalses cercanos.</td></tr>';
                 return;
             }
 
             reservoirs.forEach(reservoir => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${reservoir.id}</td>
-                    <td>${reservoir.ambito_nombre}</td>
-                    <td>${reservoir.embalse_nombre}</td>
-                    <td>${reservoir.agua_total}</td>
-                    <td>${reservoir.electrico_flag}</td>
                     <td>${reservoir.codigo}</td>
                     <td>${reservoir.nombre}</td>
                     <td>${reservoir.embalse}</td>
@@ -149,5 +187,50 @@
             });
         }
     </script>
+
+    <!-- Botón de accesibilidad -->
+    <div style="position: relative;">
+        <button id="accessibilityBtn">Accesibilidad</button>
+        <div class="dropdown" id="accessibilityMenu">
+            <button id="readTextBtn">Leer texto</button>
+            <button id="toggleFontBtn">Formato para disléxicos</button>
+        </div>
+    </div>
+
+    <script>
+        // Función para leer todo el texto de la página
+        document.getElementById('readTextBtn').onclick = function () {
+            const textToRead = [
+                document.querySelector('h1').innerText,
+                document.querySelector('a').innerText,
+            ];
+
+            let index = 0;
+
+            function speakNext() {
+                if (index < textToRead.length) {
+                    const utterance = new SpeechSynthesisUtterance(textToRead[index]);
+                    speechSynthesis.speak(utterance);
+                    index++;
+                    utterance.onend = speakNext; // Leer el siguiente texto al finalizar
+                }
+            }
+
+            speakNext();
+        }
+
+        // Función para alternar entre Comic Sans y la fuente normal
+        document.getElementById('toggleFontBtn').onclick = function () {
+            isComicSans = !isComicSans; // Cambiar el estado de la fuente
+            document.body.style.fontFamily = isComicSans ? 'Comic Sans MS' : 'Arial, sans-serif'; // Cambiar la fuente
+        }
+
+        // Mostrar/ocultar el menú de accesibilidad
+        document.getElementById('accessibilityBtn').onclick = function () {
+            const menu = document.getElementById('accessibilityMenu');
+            menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
+        }
+    </script>
 </body>
+
 </html>
