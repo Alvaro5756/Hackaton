@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Embalses Cercanos</title>
-    <style>
+    <style>  
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -31,11 +31,13 @@
         th {
             background-color: #e0e0e0;
         }
+
         .homepage-link {
             text-align: left;
             margin: 10px 0;
             width: 100%;
         }
+
         a {
             color: white;
             text-decoration: none;
@@ -56,6 +58,11 @@
     <table id="reservoirsTable">
         <thead>
             <tr>
+                <th>ID</th>
+                <th>Ámbito Nombre</th>
+                <th>Embalse Nombre</th>
+                <th>Agua Total</th>
+                <th>Eléctrico Flag</th>
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Embalse</th>
@@ -67,6 +74,8 @@
                 <th>CCAA</th>
                 <th>Tipo</th>
                 <th>Informe</th>
+                <th>Embalse Normalizado</th>
+                <th>Links</th>
             </tr>
         </thead>
         <tbody id="reservoirsBody"></tbody>
@@ -82,7 +91,7 @@
         }
 
         function fetchReservoirs(lat, long) {
-            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/embalses_listado/?limit=400')
+            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/?limit=400')
                 .then(response => response.json())
                 .then(data => {
                     const nearbyReservoirs = data.items.filter(reservoir => {
@@ -110,24 +119,31 @@
             reservoirsBody.innerHTML = ''; // Limpiar tabla anterior
 
             if (reservoirs.length === 0) {
-                reservoirsBody.innerHTML = '<tr><td colspan="5">No se encontraron embalses cercanos.</td></tr>';
+                reservoirsBody.innerHTML = '<tr><td colspan="17">No se encontraron embalses cercanos.</td></tr>';
                 return;
             }
 
             reservoirs.forEach(reservoir => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                      <td>${item.codigo}</td>
-                        <td>${item.nombre}</td>
-                        <td>${item.embalse}</td>
-                        <td>${item.x}</td>
-                        <td>${item.y}</td>
-                        <td>${item.demarc}</td>
-                        <td>${item.cauce}</td>
-                        <td>${item.provincia}</td>
-                        <td>${item.ccaa}</td>
-                        <td>${item.tipo}</td>
-                        <td><a href="${item.informe}" target="_blank">Ver Informe</a></td>
+                    <td>${reservoir.id}</td>
+                    <td>${reservoir.ambito_nombre}</td>
+                    <td>${reservoir.embalse_nombre}</td>
+                    <td>${reservoir.agua_total}</td>
+                    <td>${reservoir.electrico_flag}</td>
+                    <td>${reservoir.codigo}</td>
+                    <td>${reservoir.nombre}</td>
+                    <td>${reservoir.embalse}</td>
+                    <td>${reservoir.x}</td>
+                    <td>${reservoir.y}</td>
+                    <td>${reservoir.demarc}</td>
+                    <td>${reservoir.cauce}</td>
+                    <td>${reservoir.provincia}</td>
+                    <td>${reservoir.ccaa}</td>
+                    <td>${reservoir.tipo}</td>
+                    <td><a href="${reservoir.informe}" target="_blank">Ver Informe</a></td>
+                    <td>${reservoir.embalse_normalized}</td>
+                    <td><a href="${reservoir.links[0]?.href}" target="_blank">Más Info</a></td>
                 `;
                 reservoirsBody.appendChild(row);
             });
