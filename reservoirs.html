@@ -31,10 +31,28 @@
         th {
             background-color: #e0e0e0;
         }
+        .homepage-link {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <h1>Embalses Cercanos</h1>
+    <div class="homepage-link">
+        <a href="index.html">Homepage</a>
+    </div>
     <table id="reservoirsTable">
         <thead>
             <tr>
@@ -58,7 +76,7 @@
         }
 
         function fetchReservoirs(lat, long) {
-            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/listadoutf8/?limit=400')
+            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/embalses_listado/?limit=400')
                 .then(response => response.json())
                 .then(data => {
                     const nearbyReservoirs = data.items.filter(reservoir => {
